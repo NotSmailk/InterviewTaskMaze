@@ -1,19 +1,17 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 // скрипт для камеры игрока
 public class Player_Camera : MonoBehaviour
 {
-    // задача переменных
-    [SerializeField] private CameraState cameraState = CameraState.CamStatic;
-    protected GameObject player;
+    // задача полей
+    public CameraState cameraState = CameraState.CamRoom;
+    private GameObject player;
 
     // нахождение объекта игрока
-    void Start() { player = GameObject.Find("Player"); }
+    private void Start() { player = GameObject.Find("Player"); }
 
     // следование за игрока в случае если камера следящая
-    void Update() { 
+    private void Update() { 
         if (cameraState == CameraState.CamFollow) { transform.position = new Vector3(player.transform.position.x, player.transform.position.y,transform.position.z); }
     }
 
@@ -23,5 +21,5 @@ public class Player_Camera : MonoBehaviour
     }
 
     // режимы камеры (статическая, следящая, комнатная)
-    public enum CameraState{ CamStatic, CamFollow, CamRoom }
+    public enum CameraState{ CamFollow, CamRoom }
 }

@@ -1,22 +1,16 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using Src;
 
 // скрипт для ключей
-public class KeyScript : MonoBehaviour
+public class KeyScript : ObjectInfo
 {
-    // задача переменных
-    [SerializeField] private KeyData keyData = null;
-
     // задача спрайта объекта(ключа) и отключения "подсвечивания"
-    void Start() {
-        transform.GetChild(0).gameObject.SetActive(false);
-        GetComponent<SpriteRenderer>().sprite = keyData.KeySprite;
+    private void Start() {
+        GetComponent<SpriteRenderer>().sprite = ObjSprite;
     }
 
-    // геттер данных о ключе (его свойств) 
-    public KeyData GetData(){  return keyData; }
-
     // "подсвечивание" ключа
-    public void OutlineActivity(bool activity){ transform.GetChild(0).gameObject.SetActive(activity); }
+    public void OutlineActivity(bool activity){ 
+        transform.GetChild(0).gameObject.SetActive(activity); 
+    }
 }
