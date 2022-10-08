@@ -57,7 +57,7 @@ public class RoomCheckSctipt : MonoBehaviour
         if (other.gameObject.CompareTag("Door")) 
             DoorCount(other.gameObject.GetComponentInParent<DoorScript>().GetColor()); 
 
-        canClear = other.gameObject.CompareTag("Exit");
+        canClear |= other.gameObject.CompareTag("Exit");
     }
 
     private void OnTriggerExit2D(Collider2D other) 
