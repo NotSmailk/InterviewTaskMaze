@@ -7,11 +7,11 @@ namespace Assets.Source.Scripts
     {
         private WallData _data;
 
-        public WallFactory(Wall prefab, Transform parent, WallData data)
+        public WallFactory(Wall prefab, WallData data)
         {
-            this.parent = parent;
             objectToCreate = prefab;
             _data = data;
+            parent = new GameObject("WallsContent").transform;
         }
 
         public override Wall Get()

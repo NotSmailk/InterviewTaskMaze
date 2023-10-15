@@ -1,3 +1,4 @@
+using Assets.Source.Scripts.Utils;
 using UnityEngine;
 
 namespace Assets.Source.Scripts
@@ -17,7 +18,7 @@ namespace Assets.Source.Scripts
             _link = link;
             _color = color;
             _renderer = GetComponent<SpriteRenderer>();
-            _renderer.color = Constants.Colors[color];
+            RendererExtra.SetColor(_renderer, "_Color", Constants.Colors[color]);
 
             return this;
         }

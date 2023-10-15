@@ -10,10 +10,6 @@ namespace Assets.Source.Scripts
     {
         [SerializeField] private GameData _data;
         [SerializeField] private GameCamera _camera;
-        [SerializeField] private Transform _playerContent;
-        [SerializeField] private Transform _keysContent;
-        [SerializeField] private Transform _doorsContent;
-        [SerializeField] private Transform _wallsContent;
         [SerializeField] private List<Room> _rooms;
         [SerializeField] private ConnectionConfig _connectionConfig;
 
@@ -28,10 +24,10 @@ namespace Assets.Source.Scripts
         private void Awake()
         {
             _ui = gameObject.AddComponent<GameUI>().Init(Restart);
-            _playerFactory = new PlayerFactory(_data.PlayerPrefab, _playerContent);
-            _keysFactory = new KeyFactory(_data.KeyPrefab, _keysContent);
-            _doorsFactory = new DoorFactory(_data.DoorPrefab, _doorsContent);
-            _wallsFactory = new WallFactory(_data.WallData.WallPrefab, _wallsContent, _data.WallData);
+            _playerFactory = new PlayerFactory(_data.PlayerPrefab);
+            _keysFactory = new KeyFactory(_data.KeyPrefab);
+            _doorsFactory = new DoorFactory(_data.DoorPrefab);
+            _wallsFactory = new WallFactory(_data.WallData.WallPrefab, _data.WallData);
 
             _connectionConfig.Init(_doorsFactory, _wallsFactory); 
             _player = _playerFactory.Get().Init(_ui.Interactable);
@@ -53,14 +49,14 @@ namespace Assets.Source.Scripts
 
         private void Victory()
         {
-            _ui.GameResult("You ecaped the maze");
+            _ui.GameResult(Constants.KeyWords.WIN_RESULT);
             _player.Stop();
             _gameEnded = true;
         }
 
         private void Defeat()
         {
-            _ui.GameResult("You lost in the maze");
+            _ui.GameResult(Constants.KeyWords.LOSE_RESULT);
             _player.Stop();
             _gameEnded = true;
         }

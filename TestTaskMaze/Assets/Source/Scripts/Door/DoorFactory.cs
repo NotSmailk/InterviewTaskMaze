@@ -6,10 +6,10 @@ namespace Assets.Source.Scripts
 {
     public class DoorFactory : GameObjectFactory<Door>
     {
-        public DoorFactory(Door prefab, Transform parent)
+        public DoorFactory(Door prefab)
         {
-            this.parent = parent;
             objectToCreate = prefab;
+            parent = new GameObject("DoorsContent").transform;
         }
 
         public override Door Get()

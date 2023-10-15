@@ -5,10 +5,10 @@ namespace Assets.Source.Scripts
 {
     public class PlayerFactory : GameObjectFactory<Player>
     {
-        public PlayerFactory(Player prefab, Transform parent)
+        public PlayerFactory(Player prefab)
         {
             objectToCreate = prefab;
-            this.parent = parent;
+            parent = new GameObject("PlayerContent").transform;
         }
 
         public override Player Get()

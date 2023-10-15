@@ -16,12 +16,12 @@ namespace Assets.Source.Scripts
         [SerializeField] private bool _hasExit;
 
         private BoxCollider2D _collider;
-        private ColorVector _keysInit = new ColorVector();
+        private ColorVector _keysInit;
         private float _offset = 3f;
         private float _wallOffset = 5f;
         private List<Door> _doors = new List<Door>();
         private TriggerBox _box;
-        private ColorVector _doorsVector = new ColorVector();
+        private ColorVector _doorsVector;
         private UnityEvent _victory = new UnityEvent();
         private UnityEvent _defeat = new UnityEvent();
 
@@ -30,9 +30,7 @@ namespace Assets.Source.Scripts
         public void Init(IFactory<Key> keyFactory, IFactory<Wall> wallFactory, UnityAction victory, UnityAction defeat)
         {
             _box = gameObject.AddComponent<TriggerBox>();
-            _keysInit.yellow = _keys.yellow;
-            _keysInit.blue = _keys.blue;
-            _keysInit.green = _keys.green;
+            _keysInit = _keys;
             _box.AddOnEnter(PlayerEnter);
             _box.AddOnExit(PlayerExit);
             _collider = GetComponent<BoxCollider2D>();
@@ -54,9 +52,7 @@ namespace Assets.Source.Scripts
 
         public void ResetKeys()
         {
-            _keys.yellow = _keysInit.yellow;
-            _keys.blue = _keysInit.blue;
-            _keys.green = _keysInit.green;
+            _keys = _keysInit;
         }
 
         public void Reclaim(ColorType type)

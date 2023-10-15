@@ -1,5 +1,5 @@
 ﻿using Assets.Source.Scripts.Collision;
-using System.Collections.Generic;
+using Assets.Source.Scripts.Utils;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -23,7 +23,7 @@ namespace Assets.Source.Scripts
         {
             _rb = GetComponent<Rigidbody2D>();
             _renderer = GetComponent<SpriteRenderer>();
-            _renderer.color = Constants.Colors.GetValueOrDefault(ColorType.Default);
+            SetColor(ColorType.Default);
             _input = new PlayerInputService();
             _onInteract.AddListener(onInteract);
             _box = gameObject.AddComponent<TriggerBox>();
@@ -43,7 +43,7 @@ namespace Assets.Source.Scripts
 
         public void SetColor(ColorType type)
         {
-            _renderer.color = Constants.Colors.GetValueOrDefault(type);
+            RendererExtra.SetColor(_renderer, "_Color", Constants.Colors[type]);
         }
 
         public void Stop()

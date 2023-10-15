@@ -5,10 +5,10 @@ namespace Assets.Source.Scripts
 {
     public class KeyFactory : GameObjectFactory<Key>
     {
-        public KeyFactory(Key prefab, Transform parent)
+        public KeyFactory(Key prefab)
         {
-            this.parent = parent;
             objectToCreate = prefab;
+            parent = new GameObject("KeysContent").transform;
         }
 
         public override Key Get()

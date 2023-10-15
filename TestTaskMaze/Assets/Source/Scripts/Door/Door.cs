@@ -1,4 +1,6 @@
 ﻿using Assets.Source.Scripts;
+using Assets.Source.Scripts.Utils;
+using System.Drawing;
 using UnityEngine;
 
 namespace Assets.Source.Script
@@ -16,7 +18,7 @@ namespace Assets.Source.Script
             _color = color;
             _boxCollider = GetComponent<BoxCollider2D>();
             _renderer = GetComponent<SpriteRenderer>();
-            _renderer.color = Constants.Colors[color];
+            RendererExtra.SetColor(_renderer, "_Color", Constants.Colors[color]);
         }
 
         public void UpdateCollision(ColorType color)
@@ -24,13 +26,13 @@ namespace Assets.Source.Script
             _boxCollider.isTrigger = _color.Equals(color);
 
             if (_boxCollider.isTrigger)
-                _renderer.color = Constants.Colors[ColorType.Default];
+                RendererExtra.SetColor(_renderer, "_Color", Constants.Colors[ColorType.Default]);
         }
 
         public void ResetCollision()
         {
             _boxCollider.isTrigger = false;
-            _renderer.color = Constants.Colors[_color];
+            RendererExtra.SetColor(_renderer, "_Color", Constants.Colors[_color]);
         }
     }
 }

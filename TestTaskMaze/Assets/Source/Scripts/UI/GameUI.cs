@@ -53,7 +53,7 @@ namespace Assets.Source.Scripts.UI
             if (_interactableActive)
             {
                 var interactable = new Rect(Screen.width / 2 - _interactableWidth / 2, Screen.height - _interactableHeight * 2, _interactableWidth, _interactableHeight);
-                GUI.Label(interactable, "Press \"E\" to interact", _interactableStyle);
+                GUI.Label(interactable, Constants.KeyWords.INTERACTABLE_MSG, _interactableStyle);
             }
 
             if (_gameEnded)
@@ -62,7 +62,7 @@ namespace Assets.Source.Scripts.UI
                 GUI.Label(resultLabel, _gameResult, _gameResultStyle);
 
                 var resultBtn = new Rect(Screen.width / 2 - _gameResultWidth / 2, Screen.height / 2 + _gameResultHeight * 2, _gameResultWidth, _gameResultHeight);
-                if (GUI.Button(resultBtn, "Retry"))
+                if (GUI.Button(resultBtn, Constants.KeyWords.RETRY))
                 {
                     _restart.Invoke();
                 }

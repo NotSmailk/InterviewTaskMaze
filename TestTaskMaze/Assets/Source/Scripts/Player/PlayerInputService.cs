@@ -4,8 +4,8 @@ namespace Assets.Source.Scripts
 {
     public class PlayerInputService
     {
-        public float HorizontalAxis => Input.GetAxis("Horizontal");
-        public float VerticalAxis => Input.GetAxis("Vertical");
-        public bool Interact => Input.GetKey(KeyCode.E);
+        public float HorizontalAxis => Input.GetAxis(Constants.InputInfo.HORIZONTAL);
+        public float VerticalAxis => Input.GetAxis(Constants.InputInfo.VERTICAL);
+        public bool Interact => Input.GetKey(Constants.InputInfo.InteractKey);
     }
 }
