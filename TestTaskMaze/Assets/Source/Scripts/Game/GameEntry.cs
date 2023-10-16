@@ -1,12 +1,13 @@
 using Assets.Source.Script;
 using Assets.Source.Scripts.Factories;
+using Assets.Source.Scripts.Signals;
 using Assets.Source.Scripts.UI;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Assets.Source.Scripts
 {
-    public class Game : MonoBehaviour
+    public class GameEntry : MonoBehaviour
     {
         [SerializeField] private GameData _data;
         [SerializeField] private GameCamera _camera;
@@ -23,19 +24,30 @@ namespace Assets.Source.Scripts
 
         private void Awake()
         {
-            _ui = gameObject.AddComponent<GameUI>().Init(Restart);
+            _ui = gameObject.AddComponent<GameUI>().Init();
             _playerFactory = new PlayerFactory(_data.PlayerPrefab);
             _keysFactory = new KeyFactory(_data.KeyPrefab);
             _doorsFactory = new DoorFactory(_data.DoorPrefab);
-            _wallsFactory = new WallFactory(_data.WallData.WallPrefab, _data.WallData);
+            _wallsFactory = new WallFactory(_data.WallData);
 
             _connectionConfig.Init(_doorsFactory, _wallsFactory); 
-            _player = _playerFactory.Get().Init(_ui.Interactable);
+            _player = _playerFactory.Get().Init();
             _player.transform.position = _rooms[0].transform.position;
             _camera.Init();
 
+            EventBus.Instance.Subscribe<VictorySignal>(Victory);
+            EventBus.Instance.Subscribe<DefeatSignal>(Defeat);
+            EventBus.Instance.Subscribe<RestartSignal>(Restart);
+
             foreach (var room in _rooms)
-                room.Init(_keysFactory, _wallsFactory, Victory, Defeat);            
+                room.Init(_keysFactory, _wallsFactory);            
+        }
+
+        private void OnDestroy()
+        {
+            EventBus.Instance.UnSubscribe<VictorySignal>(Victory);
+            EventBus.Instance.UnSubscribe<DefeatSignal>(Defeat);
+            EventBus.Instance.UnSubscribe<RestartSignal>(Restart);
         }
 
         private void Update()
@@ -47,21 +59,17 @@ namespace Assets.Source.Scripts
             _camera.GameUpdate(_player.transform);
         }
 
-        private void Victory()
+        private void Victory(VictorySignal signal)
         {
-            _ui.GameResult(Constants.KeyWords.WIN_RESULT);
-            _player.Stop();
             _gameEnded = true;
         }
 
-        private void Defeat()
+        private void Defeat(DefeatSignal signal)
         {
-            _ui.GameResult(Constants.KeyWords.LOSE_RESULT);
-            _player.Stop();
             _gameEnded = true;
         }
 
-        private void Restart()
+        private void Restart(RestartSignal signal)
         {
             _keysFactory.ReclaimAll();
 

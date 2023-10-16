@@ -1,6 +1,7 @@
 ﻿using Assets.Source.Script;
 using Assets.Source.Scripts.Collision;
 using Assets.Source.Scripts.Factories;
+using Assets.Source.Scripts.Signals;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
@@ -22,12 +23,10 @@ namespace Assets.Source.Scripts
         private List<Door> _doors = new List<Door>();
         private TriggerBox _box;
         private ColorVector _doorsVector;
-        private UnityEvent _victory = new UnityEvent();
-        private UnityEvent _defeat = new UnityEvent();
 
         public bool HasEscape { get; private set; }
 
-        public void Init(IFactory<Key> keyFactory, IFactory<Wall> wallFactory, UnityAction victory, UnityAction defeat)
+        public void Init(IFactory<Key> keyFactory, IFactory<Wall> wallFactory)
         {
             _box = gameObject.AddComponent<TriggerBox>();
             _keysInit = _keys;
@@ -35,8 +34,6 @@ namespace Assets.Source.Scripts
             _box.AddOnExit(PlayerExit);
             _collider = GetComponent<BoxCollider2D>();
             _collider.isTrigger = true;
-            _victory.AddListener(victory);
-            _defeat.AddListener(defeat);
 
             CreateWalls(wallFactory);
             CreateKeys(keyFactory);
@@ -105,13 +102,13 @@ namespace Assets.Source.Scripts
 
                 if (_hasExit)
                 {
-                    _victory.Invoke();
+                    EventBus.Instance.Invoke(new VictorySignal());
                     return;
                 }
 
 
                 if (!HasEscape)
-                    _defeat.Invoke();
+                    EventBus.Instance.Invoke(new DefeatSignal());
             }
         }
 

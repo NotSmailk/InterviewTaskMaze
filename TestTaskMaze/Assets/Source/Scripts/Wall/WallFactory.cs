@@ -7,9 +7,9 @@ namespace Assets.Source.Scripts
     {
         private WallData _data;
 
-        public WallFactory(Wall prefab, WallData data)
+        public WallFactory(WallData data)
         {
-            objectToCreate = prefab;
+            objectToCreate = data.WallPrefab;
             _data = data;
             parent = new GameObject("WallsContent").transform;
         }

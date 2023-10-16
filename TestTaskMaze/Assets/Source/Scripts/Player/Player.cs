@@ -1,4 +1,5 @@
 ﻿using Assets.Source.Scripts.Collision;
+using Assets.Source.Scripts.Signals;
 using Assets.Source.Scripts.Utils;
 using UnityEngine;
 using UnityEngine.Events;
@@ -19,19 +20,36 @@ namespace Assets.Source.Scripts
         private Room _cur;
         private bool _interact;
 
-        public Player Init(UnityAction<bool> onInteract)
+        public Player Init()
         {
             _rb = GetComponent<Rigidbody2D>();
             _renderer = GetComponent<SpriteRenderer>();
             SetColor(ColorType.Default);
             _input = new PlayerInputService();
-            _onInteract.AddListener(onInteract);
             _box = gameObject.AddComponent<TriggerBox>();
             _box.AddOnStay(InteractableStay);
             _box.AddOnEnter(InteractableEnter);
             _box.AddOnExit(InteractableExit);
+            EventBus.Instance.Subscribe<VictorySignal>(Victory);
+            EventBus.Instance.Subscribe<DefeatSignal>(Defeat);
 
             return this;
+        }
+
+        private void OnDestroy()
+        {
+            EventBus.Instance.UnSubscribe<VictorySignal>(Victory);
+            EventBus.Instance.UnSubscribe<DefeatSignal>(Defeat);
+        }
+
+        public void Victory(VictorySignal signal)
+        {
+            _rb.velocity = Vector2.zero;
+        }
+
+        public void Defeat(DefeatSignal signal)
+        {
+            _rb.velocity = Vector2.zero;
         }
 
         public void GameUpdate()
@@ -46,15 +64,10 @@ namespace Assets.Source.Scripts
             RendererExtra.SetColor(_renderer, "_Color", Constants.Colors[type]);
         }
 
-        public void Stop()
-        {
-            _rb.velocity = Vector2.zero;
-        }
-
         public void InteractableEnter(Collider2D collision)
         {
             if (collision.TryGetComponent(out IInteractable interactable))
-                _onInteract.Invoke(true);
+                EventBus.Instance.Invoke(new InteractSignal(true));
 
             if (collision.TryGetComponent(out Room room))
             {
@@ -66,7 +79,7 @@ namespace Assets.Source.Scripts
         public void InteractableExit(Collider2D collision)
         {
             if (collision.TryGetComponent(out IInteractable interactable))
-                _onInteract.Invoke(false);
+                EventBus.Instance.Invoke(new InteractSignal(false));
         }
 
         public void InteractableStay(Collider2D collision)

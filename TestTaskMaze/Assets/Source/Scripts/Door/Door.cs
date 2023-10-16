@@ -1,6 +1,5 @@
 ﻿using Assets.Source.Scripts;
 using Assets.Source.Scripts.Utils;
-using System.Drawing;
 using UnityEngine;
 
 namespace Assets.Source.Script
